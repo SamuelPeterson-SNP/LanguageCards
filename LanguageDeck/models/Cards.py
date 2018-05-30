@@ -56,7 +56,7 @@ class LanguageAVocab(Base):
     example_type = LanguageAExample
 
 
-# LanguageB_Vocab cards.  In our case, LanguageA is German
+# LanguageB_Vocab cards.  In our case, LanguageB is German
 # There the following relationships between with LanguageB_Vocab:
 #     * many-to-many: LanguageA_Vocab
 #     * many-to-many: LanguageB_Examples

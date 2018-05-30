@@ -1,10 +1,9 @@
 from contextlib import contextmanager
 
-
 @contextmanager
-def session_scope(session_factory, **args):
+def session_scope(session_factory):
     """Provide transaction scope arround a series of operations."""
-    sess = session_factory(**args)
+    sess = session_factory()
     try:
         yield sess
         sess.commit()
