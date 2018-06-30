@@ -1,6 +1,8 @@
 import sqlalchemy
 import tkinter as tk
-import LanguageDeck.ui.CardView as cdv
+
+import LanguageDeck.ui.DeckView as dkv
+import LanguageDeck.ui.decks as dks
 
 if __name__ == "__main__":
     from LanguageDeck.models import *
@@ -22,16 +24,7 @@ if __name__ == "__main__":
     exampleba = Cards.LanguageBExample(text="Je, Ich bin ein Beispiel")
     exb2 = Cards.LanguageBExample(text="Ich bin auch ein Beispiel")
 
-    sess.add(user)
-    sess.add(decka)
-    sess.add(vocabaa)
-    sess.add(vocabba)
-    sess.add(vocabbb)
-    sess.add(exampleaa)
-    sess.add(exampleba)
-    sess.add(va12)
-    sess.add(va21)
-    sess.add(exb2)
+    sess.add_all([user, decka, vocabaa, va12, vocabba, va21, vocabbb, exampleaa, exampleba, exb2])
 
     sess.commit()
 
@@ -40,12 +33,13 @@ if __name__ == "__main__":
     cds.add_translation(va21, vocabbb)
     cds.add_example(vocabba, exampleba)
     cds.add_example(vocabba, exb2)
+    dks.add_all_cards(decka,  [vocabaa, va12, vocabba, va21, vocabbb, exampleaa, exampleba, exb2])
 
     sess.commit()
 
-
     root = tk.Tk()
-    ap = cdv.CardView(vocabba, master=root, session_factory=session)
+    #ap = cdv.CardView(vocabba, master=root, session_factory=session)
+    ap = dkv.BrowseDeckView(decka, root, session)
     ap.mainloop()
 
 

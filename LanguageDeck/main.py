@@ -1,17 +1,24 @@
 import sqlalchemy
+import configparser
+import LanguageDeck.session_tools.session_scope as s_scope
+import LanguageDeck.ui.DeckView as dkv
+import tkinter as tk
 
 if __name__ == "__main__":
     import LanguageDeck.models as models
 
-    engine = sqlalchemy.create_engine(params[db_conn])
-    engine = sqlalchemy.create_engine('postgresql+psycopg2://samuel:1812@localhost/languagedeck', echo=True)
+    config = configparser.ConfigParser()
+    config.read('config.ini')
 
-    #models.Base.metadata.create_all(engine)
+    engine = sqlalchemy.create_engine(config['connection']['connection_string'], echo=True)
+    models.Base.metadata.create_all(engine)
+    session = sqlalchemy.orm.sessionmaker(bind=engine)
+    with s_scope.session_scope(session) as sess:
+        deck = sess.query(models.decks.Deck).filter_by(name="master").one_or_none()
+        if not deck:
+            deck = models.decks.Deck(name="master")
 
-    #engine = sqlalchemy.create_engine('sqlite://')
-    #models.Base.metadata.create_all(engine)
-    #self.engine = create_test_db()
-    #self.session = sqlalchemy.orm.sessionmaker(bind=self.engine)
-    #self.sess = self.session()
-
+    root = tk.Tk()
+    ap = dkv.BrowseDeckView(deck, root, session)
+    ap.mainloop()
 
